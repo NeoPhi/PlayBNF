@@ -1,0 +1,44 @@
+addr-spec       =   local-part "@" domain
+local-part      =   dot-atom / quoted-string / obs-local-part
+domain          =   dot-atom / domain-literal / obs-domain
+domain-literal  =   [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
+dtext           =   %d33-90 /          ; Printable US-ASCII
+                    %d94-126 /         ;  characters not including
+                   obs-dtext          ;  "[", "]", or "\"
+atext           =   ALPHA / DIGIT / "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+" / "-" / "/" / "=" / "?" /
+                   "^" / "_" / "`" / "{" / "|" / "}" / "~"
+atom            =   [CFWS] 1*atext [CFWS]
+dot-atom-text   =   1*atext *("." 1*atext)
+dot-atom        =   [CFWS] dot-atom-text [CFWS]
+specials        =   "(" / ")" /        ; Special characters that do
+                   "<" / ">" /        ;  not appear in atext
+                   "[" / "]" /
+                   ":" / ";" /
+                   "@" / "\" /
+                   "," / "." /
+                   DQUOTE
+FWS             =   ([*WSP CRLF] 1*WSP) /  obs-FWS; Folding white space
+ctext           =   %d33-39 /          ; Printable US-ASCII
+                   %d42-91 /          ;  characters not including
+                   %d93-126 /         ;  "(", ")", or "\"
+                   obs-ctext
+ccontent        =   ctext / quoted-pair / comment
+comment         =   "(" *([FWS] ccontent) [FWS] ")"
+CFWS            =   (1*([FWS] comment) [FWS]) / FWS
+qtext           =   %d33 /             ; Printable US-ASCII
+                    %d35-91 /          ;  characters not including
+                    %d93-126 /         ;  "\" or the quote character
+                    obs-qtext
+qcontent        =   qtext / quoted-pair
+quoted-string   =   [CFWS]
+                   DQUOTE *([FWS] qcontent) [FWS] DQUOTE
+                   [CFWS]
+DQUOTE          =  %x22 ; " (Double Quote)
+ALPHA           =  %x41-5A / %x61-7A   ; A-Z / a-z
+DIGIT           =  %x30-39; 0-9
+WSP             =  SP / HTAB; white space
+SP              =  %x20
+HTAB            =  %x09; horizontal tab
+CR              =  %x0D; carriage return
+CRLF            =  CR LF; Internet standard newline
+LF              =  %x0A; linefeed
